@@ -14,18 +14,41 @@ public class Main {
 				.addAnnotatedClass(City.class)
 				.buildSessionFactory();
 		
+		//unit of work design pattern
 		Session session = factory.getCurrentSession();
 		
 		try {
+			
 			session.beginTransaction();
+				
+				// example HQL query -> "from City c where c.countryCode='TUR' AND c.district='Ankara'"
+				// example query -> "from City c where c.name LIKE 'kar%'"
+				/* Select operation
+				 * List<City> cities =
+				 * session.createQuery("from City c group by c.name ").
+				 * getResultList();
+				 * 
+				 * for(City city:cities) { System.out.println(city.getName()); }
+				 */
+//				Insert operation
+//			 	City city = new City();
+//			 	city.setName("Bursa 16");
+//			 	city.setCountryCode("TUR");
+//			 	city.setDistrict("Marmara");
+//			 	city.setPopulation(30000000);
+//			 	session.save(city);
 			
-			List<City> cities = session.createQuery("from City").getResultList();
-			
-			for(City city:cities) {
-				System.out.println(city.getName());
-			}
-			
-			session.getTransaction().commit();
+//				Update operation
+//				City city = session.get(City.class, 4084); // getting city that id=4084
+//				city.setPopulation(20000000);
+//				session.save(city);
+				
+//				Delete operation
+				City city = session.get(City.class, 4084);
+				session.delete(city);
+				
+			 	session.getTransaction().commit();
+			 	System.out.println("");
 		}finally {
 			factory.close();
 		}
